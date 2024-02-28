@@ -1,0 +1,56 @@
+def arithmetic_arranger(problems, show_answers=False):
+	# Check for too many problems
+	if len(problems) > 5:
+		return "Error: Too many problems."
+
+	arranged_problems = {"top": [], "bottom": [], "line": [], "result": []}
+
+	for problem in problems:
+		# Split the problem into operands and operator
+		operand1, operator, operand2 = problem.split()
+
+		# Check for valid operator
+		if operator not in ['+', '-']:
+			return "Error: Operator must be '+' or '-'."
+
+		# Check for valid operands
+		if not operand1.isdigit() or not operand2.isdigit():
+			return "Error: Numbers must only contain digits."
+
+		# Check for maximum width of operands
+		if len(operand1) > 4 or len(operand2) > 4:
+			return "Error: Numbers cannot be more than four digits."
+
+		# Calculate width for the current problem
+		width = max(len(operand1), len(operand2)) + 2
+
+		# Arrange the problem
+		arranged_problems["top"].append(operand1.rjust(width))
+		arranged_problems["bottom"].append(f"{operator} {operand2.rjust(width - 2)}")
+		arranged_problems["line"].append("-" * width)
+
+		# If show_answers is True, calculate results and format
+		if show_answers:
+			if operator == '+':
+				result = int(operand1) + int(operand2)
+			else:
+				result = int(operand1) - int(operand2)
+			arranged_problems["result"].append(str(result).rjust(width))
+
+	if not show_answers:
+		# Join the arranged problems with four spaces in between
+		arranged_format = "\n".join([
+			"    ".join(arranged_problems["top"]),
+			"    ".join(arranged_problems["bottom"]),
+			"    ".join(arranged_problems["line"])
+		])
+
+	else:
+		# Join the arranged problems with four spaces in between including results
+		arranged_format = "\n".join([
+			"    ".join(arranged_problems["top"]),
+			"    ".join(arranged_problems["bottom"]),
+			"    ".join(arranged_problems["line"]),
+			"    ".join(arranged_problems["result"])
+		])
+	return arranged_format
